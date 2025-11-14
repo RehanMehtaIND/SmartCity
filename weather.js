@@ -43,8 +43,11 @@
 
             const card = document.createElement("div")
             const aside = document.querySelector(".sidebar.glass")
+            const mapIframeCont = document.querySelector(".map-iframe-container")
             card.classList.add("city-card", "glass")
             card.dataset.city = `${city}`
+
+            // <iframe id="mapFrame" class="map-iframe" src="https://www.google.com/maps?q=CITY_NAME&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
             card.innerHTML = `
                 <div class="city-info">
@@ -53,9 +56,14 @@
                         <div class="city-time" data-time-for="${city}">7:27 PM</div>
                         <div class="city-condition">${description}</div>
                     </div>
-                    <div class="city-temp">${temp}</div>
+                    <div class="city-temp">${Math.round((temp-273.15)*100)/100}°C</div>
                 </div>`
             aside.appendChild(card)
+
+            // card.innerHTML =  `
+            //     <iframe id="mapFrame" class="map-iframe" src="https://www.google.com/maps?q=${city}&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            // `
+            // mapIframeCont.appendChild(card)
 
             card.addEventListener("click", () => {
                 locationName.textContent = city
@@ -97,38 +105,3 @@
             alert(msg);
             cityInput.value = "";
         }
-
-        // <div class="city-card glass" data-city="Bengaluru">
-        //         <div class="city-info">
-        //             <div>
-        //                 <div class="city-name">Bengaluru</div>
-        //                 <div class="city-time" data-time-for="Bengaluru">7:27 PM</div>
-        //                 <div class="city-condition">Clear</div>
-        //             </div>
-        //             <div class="city-temp">23°</div>
-        //         </div>
-        //         <div style="display:flex;justify-content:space-between;margin-top:15px;font-size:0.8rem;color:#94a3b8">
-        //             <span>H:27° L:17°</span>
-        //         </div>
-        //     </div>
-
-//         const card = document.createElement("div")
-// card.classList.add("city-card", "glass")
-// card.dataset.city = "Bengaluru"
-
-// card.innerHTML = `
-//     <div class="city-info">
-//         <div>
-//             <div class="city-name">Bengaluru</div>
-//             <div class="city-time" data-time-for="Bengaluru">7:27 PM</div>
-//             <div class="city-condition">Clear</div>
-//         </div>
-//         <div class="city-temp">23°</div>
-//     </div>
-
-//     <div style="display:flex;justify-content:space-between;margin-top:15px;font-size:0.8rem;color:#94a3b8">
-//         <span>H:27° L:17°</span>
-//     </div>
-// `
-
-// document.body.appendChild(card)
