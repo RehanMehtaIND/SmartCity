@@ -41,28 +41,21 @@
                 <div class="hourly-scroll" id="hourlyForecastContainer"></div>
             </div>
 
-            <div class="glass forecast-card">
-                <div class="widget-title"><i class="ph ph-calendar"></i> 10-Day Forecast</div>
-                <div class="forecast-list" id="forecastContainer"></div>
-            </div>
-
             <div class="bento-grid">
                 <div class="glass">
                     <div class="widget-title"><i class="ph ph-wind"></i> Air Quality</div>
                     <div class="widget-content">
-                        <div class="widget-value-large" id="aqiValue">143</div>
-                        <div id="aqiText" style="font-size:0.9rem;margin-bottom:10px">Moderately Polluted</div>
+                        <div class="widget-value-large" id="aqiValue">AQI : 0, PM2.5 : 0</div>
+                        <div id="aqiText" style="font-size:0.9rem;margin-bottom:10px"></div>
                         <div class="air-quality-gauge">
                             <div class="gauge-indicator" id="aqiIndicator" style="left:60%"></div>
                         </div>
-                        <div class="widget-subtext" id="aqiSubtext">Air quality is 143, similar to yesterday.</div>
                     </div>
                 </div>
 
                 <div class="glass col-span-2" style="padding:10px">
                     <div class="widget-title" style="padding:14px 14px 0 14px"><i class="ph ph-map-trifold"></i> Location Map</div>
                     <div class="map-iframe-container">
-                        <iframe id="mapFrame" class="map-iframe" src="https://www.google.com/maps/embed?pb=!1m18" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
 
@@ -71,28 +64,9 @@
                     <div class="widget-content wind-display">
                         <i id="windIcon" class="ph ph-navigation-arrow wind-icon" style="transform:rotate(97deg)"></i>
                         <div>
-                            <div class="widget-value-large" id="windSpeed">10 <span class="widget-value-small">kph</span></div>
-                            <div class="wind-value" id="windGusts">Gusts: 26 kph</div>
-                            <div class="wind-value" id="windDirection">Direction: 97° ENE</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass col-span-2">
-                    <div class="widget-title"><i class="ph ph-sun-dim"></i> UV Index & Sunrise</div>
-                    <div class="widget-content sun-uv-content">
-                        <div class="uv-index-display">
-                            <div class="widget-value-large" id="uvValue">0 <span class="widget-value-small">Low</span></div>
-                            <div class="widget-subtext" id="uvSubtext">Low for the rest of the day.</div>
-                        </div>
-                        <div class="sun-path-container">
-                            <div class="sun-path-arc">
-                                <i class="ph ph-moon sun-icon-on-path" id="sunIcon" style="left:95%;top:20px;color:var(--text-secondary)"></i>
-                            </div>
-                            <div class="sun-path-labels">
-                                <span id="sunriseTime"><i class="ph ph-sunrise"></i> 6:17 AM</span>
-                                <span id="sunsetTime"><i class="ph ph-sunset"></i> 6:49 PM</span>
-                            </div>
+                            <div class="widget-value-large" id="windSpeed">0<span class="widget-value-small">kph</span></div>
+                            <div class="wind-value" id="windGusts">Gusts: 0 kph</div>
+                            <div class="wind-value" id="windDirection">Direction: 0° ENE</div>
                         </div>
                     </div>
                 </div>
@@ -100,49 +74,27 @@
                 <div class="glass">
                     <div class="widget-title"><i class="ph ph-drop"></i> Humidity</div>
                     <div class="widget-content">
-                        <div class="widget-value-large" id="humidityValue">59%</div>
+                        <div class="widget-value-large" id="humidityValue">0%</div>
                         <div class="widget-subtext" id="dewPoint">The dew point is 14° right now.</div>
-                    </div>
-                </div>
-
-                <div class="glass">
-                    <div class="widget-title"><i class="ph ph-gauge"></i> Pressure</div>
-                    <div class="widget-content">
-                        <div style="display:flex;align-items:center;gap:10px">
-                            <i class="ph ph-trend-up" id="pressureIcon" style="font-size:1.5rem;color:var(--accent-green)"></i>
-                            <div class="widget-value-large" id="pressureValue">1,013 <span class="widget-value-small">hPa</span></div>
-                        </div>
-                        <div class="widget-subtext" id="pressureSubtext">Above average</div>
-                        <div class="pressure-bar-container">
-                            <div class="pressure-bar">
-                                <div class="pressure-indicator" id="pressureIndicator" style="left:65%"></div>
-                            </div>
-                            <div class="pressure-labels">
-                                <span>Low</span>
-                                <span>High</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass">
-                    <div class="widget-title"><i class="ph ph-eye"></i> Visibility</div>
-                    <div class="widget-content">
-                        <div class="widget-value-large" id="visibilityValue">25 <span class="widget-value-small">km</span></div>
-                        <div class="widget-subtext" id="visibilitySubtext">Perfectly clear view.</div>
                     </div>
                 </div>
 
                 <div class="glass">
                     <div class="widget-title"><i class="ph ph-thermometer-cold"></i> Feels Like</div>
                     <div class="widget-content">
-                        <div class="widget-value-large" id="feelsLikeValue">21°</div>
+                        <div class="widget-value-large" id="feelsLikeValue">0°</div>
                         <div class="widget-subtext" id="feelsLikeSubtext">Wind is making it feel cooler.</div>
                     </div>
+                </div>
+
+                <div class="glass col-span-2" style="padding:10px">
+                    <div class="widget-title" style="padding:14px 14px 0 14px"><i class="ph ph-map-trifold"></i>Graph Report</div>
+                    <canvas id="weatherGraph" style="width:100%;height:100%;border-radius:10px"></canvas>
                 </div>
             </div>
         </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src = "weather.js"></script>
 </body>
 </html>
