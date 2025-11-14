@@ -57,8 +57,8 @@ async function displayWeatherInfo(data) {
     const lat = coords.lat
     const lon = coords.lon
 
-    const aq = await fetch("http://localhost:3000/aqi?lat=" + lat + "&lon=" + lon).then(r => r.json())
-    const forecast = await fetch("http://localhost:3000/forecast?lat=" + lat + "&lon=" + lon).then(r => r.json())
+    const aq = await fetch("https://smartcity-ntyo.onrender.com/aqi?lat=" + lat + "&lon=" + lon).then(r => r.json())
+    const forecast = await fetch("https://smartcity-ntyo.onrender.com/forecast?lat=" + lat + "&lon=" + lon).then(r => r.json())
 
     const mapIframeCont = document.querySelector(".map-iframe-container")
     mapIframeCont.innerHTML = ""
