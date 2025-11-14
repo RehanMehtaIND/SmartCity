@@ -1,587 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartCity Plus Dashboard</title>
-    
-    <!-- 
-        Font Note: 
-        The request specified 'SF Pro Display'. This is an Apple-proprietary font 
-        and cannot be legally used or linked from a web server.
-        'Inter' is the industry-standard, open-source alternative 
-        with a very similar "SF" aesthetic.
-    -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SmartCity+</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Phosphor Icons (Modern, SF Symbols-style icons) -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-    <style>
-        /* ===== VARIABLES & RESET ===== */
-        :root {
-            --bg-dark: #0B0F19; /* Requested deep navy blue */
-            --glass-bg: rgba(30, 41, 59, 0.2); /* Requested 20% opacity */
-            --glass-border: rgba(255, 255, 255, 0.1); /* Requested 10% opacity */
-            --glass-border-hover: rgba(255, 255, 255, 0.3);
-            --text-primary: #E5E5E5; /* Requested off-white */
-            --text-secondary: #94a3b8;
-            --accent-blue: #38bdf8;
-            --accent-yellow: #facc15;
-            --accent-red: #f43f5e;
-            --accent-green: #34d399;
-            --card-radius: 24px;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            /* Deep Space & Starfield Background */
-            background-image: 
-                radial-gradient(var(--glass-border), transparent 1px),
-                radial-gradient(var(--glass-border), transparent 1px);
-            background-size: 300px 300px, 200px 200px;
-            background-position: 0 0, 150px 150px;
-            
-            color: var(--text-primary);
-            height: 100vh;
-            overflow: hidden; /* App-like feel */
-            position: relative;
-        }
-
-        /* Ethereal Aurora Effect */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.3), transparent 60%);
-            filter: blur(150px);
-            opacity: 0.5;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* ===== NEW KEYFRAME ANIMATION ===== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ===== LAYOUT ===== */
-        .app-container {
-            display: grid;
-            grid-template-columns: 28% 1fr; /* 30/70 style split */
-            gap: 20px;
-            height: 100vh;
-            padding: 20px;
-            max-width: 1800px; /* Wider max-width */
-            margin: 0 auto;
-            position: relative; /* For z-index stacking */
-            z-index: 1;
-        }
-
-        /* ===== GLASSMORPHISM UTILITY ===== */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--card-radius);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            padding: 24px; /* Default padding */
-            display: flex;
-            flex-direction: column;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .glass:hover {
-            border-color: var(--glass-border-hover);
-            box-shadow: 0 0 40px 0 rgba(56, 189, 248, 0.1); /* Subtle blue glow on hover */
-        }
-
-        /* ===== SIDEBAR ===== */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .sidebar-header {
-            font-size: 1.5rem;
-            font-weight: 700;
-            padding: 10px 10px 0 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: rgba(0,0,0,0.3);
-            padding: 12px 15px;
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .search-bar input {
-            background: transparent;
-            border: none;
-            color: white;
-            margin-left: 10px;
-            width: 100%;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .city-card {
-            padding: 20px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .city-card.active {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(59, 130, 246, 0.2));
-            border-color: rgba(56, 189, 248, 0.5);
-        }
-
-        .city-info { display: flex; justify-content: space-between; align-items: flex-start; }
-        .city-name { font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; }
-        .city-time { font-size: 0.8rem; color: var(--text-secondary); }
-        .city-temp { font-size: 2.5rem; font-weight: 300; }
-        .city-condition { font-size: 0.9rem; margin-top: 5px; }
-
-        /* ===== MAIN DASHBOARD ===== */
-        .dashboard {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        /* Scrollbar styling */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-
-        /* Header */
-        .main-header {
-            text-align: center;
-            padding: 40px 0 20px 0;
-            position: relative;
-        }
-
-        .location-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 5px; }
-        .current-temp-display { font-size: 4rem; font-weight: 200; line-height: 1; }
-        .temp-summary { color: var(--text-secondary); margin-top: 5px; font-size: 1.1rem; }
-
-        /* Hourly Scroll */
-        .hourly-scroll {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
-        .hourly-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            min-width: 60px;
-            font-size: 0.9rem;
-        }
-        .hourly-item .ph {
-            font-size: 1.5rem;
-        }
-
-        /* 10-Day Forecast (Full Width Card) */
-        .forecast-card {
-            /* This card is now standalone */
-            height: 400px; /* Give it a fixed height */
-            /* Add fade-in animation */
-            animation: fadeInUp 0.5s ease-out 0.2s;
-            animation-fill-mode: both;
-        }
-        .forecast-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            height: 100%;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-        .forecast-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 5px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .forecast-day { font-weight: 500; width: 50px; }
-        .forecast-icon { font-size: 1.2rem; }
-        .forecast-bar { flex-grow: 1; height: 4px; background: rgba(255,255,255,0.1); margin: 0 15px; border-radius: 2px; position: relative; }
-        .forecast-fill { position: absolute; height: 100%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-yellow)); border-radius: 2px; }
-
-        /* New 4-Column Bento Grid */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4-column grid */
-            grid-auto-rows: 250px; /* Taller rows */
-            gap: 20px;
-        }
-        /* Staggered animation for grid items */
-        .bento-grid .glass {
-            animation: fadeInUp 0.5s ease-out;
-            animation-fill-mode: both;
-        }
-        .bento-grid .glass:nth-child(1) { animation-delay: 0.3s; }
-        .bento-grid .glass:nth-child(2) { animation-delay: 0.4s; }
-        .bento-grid .glass:nth-child(3) { animation-delay: 0.5s; }
-        .bento-grid .glass:nth-child(4) { animation-delay: 0.6s; }
-        .bento-grid .glass:nth-child(5) { animation-delay: 0.7s; }
-        .bento-grid .glass:nth-child(6) { animation-delay: 0.8s; }
-        .bento-grid .glass:nth-child(7) { animation-delay: 0.9s; }
-        .bento-grid .glass:nth-child(8) { animation-delay: 1.0s; }
-
-        /* Grid Spans */
-        .col-span-2 { grid-column: span 2; }
-
-        /* Widget Base Styles */
-        .widget-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-        .widget-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center content vertically */
-        }
-        .widget-value-large {
-            font-size: 2.2rem;
-            font-weight: 600;
-            line-height: 1.2;
-        }
-        .widget-value-small {
-            font-size: 1.2rem; 
-            font-weight: 300;
-        }
-        .widget-subtext {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-top: 8px;
-        }
-        
-        /* Air Quality */
-        .air-quality-gauge {
-            margin-top: 10px;
-            height: 10px;
-            background: linear-gradient(90deg, var(--accent-green) 0%, var(--accent-yellow) 50%, var(--accent-red) 100%);
-            border-radius: 5px;
-            position: relative;
-        }
-        .gauge-indicator {
-            position: absolute;
-            top: -5px;
-            width: 4px;
-            height: 20px;
-            background: white;
-            border-radius: 2px;
-            border: 1px solid black;
-        }
-
-        /* Wind Details Widget */
-        .wind-display {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .wind-icon {
-            font-size: 3.5rem;
-            color: var(--accent-blue);
-            transition: transform 0.5s ease;
-        }
-        .wind-value { font-size: 1.2rem; font-weight: 500; }
-
-        /* Google Map Card */
-        .map-iframe-container {
-            flex-grow: 1;
-            position: relative;
-            overflow: hidden;
-            border-radius: 18px; /* Fit inside padding */
-            margin: -10px; /* Fill padding */
-        }
-        .map-iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-            filter: invert(100%) grayscale(80%) brightness(1.2); /* Dark mode map */
-        }
-
-        /* UV & Sunrise Card */
-        .sun-uv-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-        .uv-index-display {
-            text-align: center;
-        }
-        .sun-path-container {
-            width: 100%;
-            margin-top: 15px;
-        }
-        .sun-path-arc {
-            height: 80px;
-            border-top: 3px dashed var(--text-secondary);
-            border-radius: 100px 100px 0 0;
-            position: relative;
-            margin: 0 auto;
-            width: 90%;
-        }
-        .sun-icon-on-path {
-            position: absolute;
-            top: -12px; /* Half of icon size */
-            color: var(--accent-yellow);
-            font-size: 1.5rem;
-            transform: translateX(-50%) rotate(0deg); /* JS can update left/rotate */
-            background: var(--bg-dark);
-            padding: 4px;
-            border-radius: 50%;
-        }
-        .sun-path-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 5px;
-            width: 90%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .sun-path-labels span { display: flex; align-items: center; gap: 5px; }
-
-        /* Pressure Widget */
-        .pressure-bar-container {
-            width: 100%;
-            margin-top: 15px;
-        }
-        .pressure-bar {
-            height: 6px;
-            background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-green) 50%, var(--accent-yellow) 100%);
-            border-radius: 3px;
-            position: relative;
-        }
-        .pressure-indicator {
-            position: absolute;
-            top: -5px;
-            width: 4px;
-            height: 16px;
-            background: white;
-            border-radius: 2px;
-            border: 1px solid black;
-        }
-        .pressure-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 8px;
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .app-container { grid-template-columns: 280px 1fr; }
-            /* Stack to 2 columns on tablet */
-            .bento-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 250px; }
-            .col-span-2 { grid-column: span 2; }
-        }
-
-        @media (max-width: 768px) {
-            body { overflow: auto; }
-            .app-container { grid-template-columns: 1fr; overflow-y: auto; height: auto; }
-            .sidebar { max-height: 400px; order: 1; }
-            .dashboard { order: 2; }
-            /* Mobile: Stack grid items */
-            .bento-grid { grid-template-columns: 1fr; grid-auto-rows: 250px; }
-            .col-span-2 { grid-column: span 1; } /* All cards are 1 col wide */
-            .main-header { padding: 20px; }
-            .location-title { font-size: 2rem; }
-            .current-temp-display { font-size: 3rem; }
-        }
-    </style>
+    <link rel = "stylesheet" href = "style.css">
 </head>
 <body>
-
     <div class="app-container">
-        
-        <!-- ===== SIDEBAR (City Selector) ===== -->
-        <aside class="sidebar">
+        <aside class="sidebar glass">
             <div class="sidebar-header">
                 <i class="ph ph-buildings"></i>
-                <span>SmartCity Plus</span>
+                <span>SmartCity+</span>
             </div>
 
-            <div class="search-bar glass">
+            <div class="search-bar">
                 <i class="ph ph-magnifying-glass"></i>
-                <input type="text" placeholder="Search for a city...">
+                <input id="citySearch" type="text" placeholder="Search for a city..." />
             </div>
 
-            <!-- City List -->
-            <div class.city-card glass active" onclick="updateCity('Bengaluru', 12.9716, 77.5946)">
-                <div class.city-info">
-                    <div>
-                        <div class="city-name">Bengaluru</div>
-                        <div class="city-time" id="time-Bengaluru">7:27 PM</div>
-                        <div class="city-condition">Clear</div>
-                    </div>
-                    <div class="city-temp">23°</div>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-top:15px; font-size:0.8rem; color:#94a3b8;">
-                    <span>H:27° L:17°</span>
-                </div>
-            </div>
-
-            <div class="city-card glass" onclick="updateCity('New Delhi', 28.6139, 77.2090)">
-                <div class="city-info">
-                    <div>
-                        <div class="city-name">New Delhi</div>
-                        <div class="city-time" id="time-New Delhi">7:27 PM</div>
-                        <div class="city-condition">Haze</div>
-                    </div>
-                    <div class="city-temp">20°</div>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-top:15px; font-size:0.8rem; color:#94a3b8;">
-                    <span>H:26° L:12°</span>
-                </div>
-            </div>
-
-            <div class="city-card glass" onclick="updateCity('Mumbai', 19.0760, 72.8777)">
-                <div class="city-info">
-                    <div>
-                        <div class="city-name">Mumbai</div>
-                        <div class="city-time" id="time-Mumbai">7:27 PM</div>
-                        <div class="city-condition">Humid</div>
-                    </div>
-                    <div class="city-temp">28°</div>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-top:15px; font-size:0.8rem; color:#94a3b8;">
-                    <span>H:31° L:21°</span>
-                </div>
-            </div>
-
-            <div class.city-card glass" onclick="updateCity('London', 51.5074, -0.1278)">
-                <div class.city-info">
-                    <div>
-                        <div class="city-name">London</div>
-                        <div class="city-time" id="time-London">1:57 PM</div>
-                        <div class="city-condition">Cloudy</div>
-                    </div>
-                    <div class="city-temp">12°</div>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-top:15px; font-size:0.8rem; color:#94a3b8;">
-                    <span>H:15° L:8°</span>
-                </div>
-            </div>
-
+            <button id = "submit" type="submit">ENTER</button>
         </aside>
 
-        <!-- ===== MAIN DASHBOARD ===== -->
         <main class="dashboard">
-            
-            <!-- Main Header Area -->
-            <div class="main-header">
+            <div class="main-header glass" id="mainHeader">
                 <div>
-                    <div class="location-title" id="mainLocation">Bengaluru</div>
-                    <div class="current-temp-display" id="mainTemp">23°</div>
-                    <div class="temp-summary" id="mainSummary">Clear • H:27° L:17°</div>
+                    <div class="location-title" id="mainLocation">Choose a City</div>
+                    <div class="current-temp-display" id="mainTemp"></div>
+                    <div class = "temp-summary" id = "humidity_level"></div>
+                    <div class="temp-summary" id="mainSummary"></div>
                 </div>
             </div>
 
-            <!-- Hourly Forecast (Horizontal) -->
-            <div class="glass" style="padding: 20px;">
+            <div class="glass">
                 <div class="widget-title"><i class="ph ph-clock"></i> Hourly Forecast</div>
-                <div class="hourly-scroll" id="hourlyForecastContainer">
-                    <!-- JS will populate this -->
-                </div>
+                <div class="hourly-scroll" id="hourlyForecastContainer"></div>
             </div>
 
-            <!-- 10-Day Forecast -->
             <div class="glass forecast-card">
                 <div class="widget-title"><i class="ph ph-calendar"></i> 10-Day Forecast</div>
-                <div class="forecast-list" id="forecastContainer">
-                    <!-- JS will populate this -->
-                </div>
+                <div class="forecast-list" id="forecastContainer"></div>
             </div>
 
-            <!-- New 4-Column Bento Grid -->
             <div class="bento-grid">
-                
-                <!-- Card 1: Air Quality -->
                 <div class="glass">
                     <div class="widget-title"><i class="ph ph-wind"></i> Air Quality</div>
                     <div class="widget-content">
                         <div class="widget-value-large" id="aqiValue">143</div>
-                        <div id="aqiText" style="font-size: 0.9rem; margin-bottom: 10px;">Moderately Polluted</div>
+                        <div id="aqiText" style="font-size:0.9rem;margin-bottom:10px">Moderately Polluted</div>
                         <div class="air-quality-gauge">
-                            <div class="gauge-indicator" id="aqiIndicator" style="left: 60%;"></div>
+                            <div class="gauge-indicator" id="aqiIndicator" style="left:60%"></div>
                         </div>
                         <div class="widget-subtext" id="aqiSubtext">Air quality is 143, similar to yesterday.</div>
                     </div>
                 </div>
 
-                <!-- Card 2: Google Map (Span 2) -->
-                <div class="glass col-span-2" style="padding: 10px;"> <!-- Less padding for map -->
-                    <div class="widget-title" style="padding: 14px 14px 0 14px;"><i class="ph ph-map-trifold"></i> Location Map</div>
+                <div class="glass col-span-2" style="padding:10px">
+                    <div class="widget-title" style="padding:14px 14px 0 14px"><i class="ph ph-map-trifold"></i> Location Map</div>
                     <div class="map-iframe-container">
-                        <iframe 
-                            id="mapFrame"
-                            class="map-iframe"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124410.63857187919!2d77.5222045097495!3d12.971169013647367!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sBengaluru%2C%2Gubbi%2C%20India!5e0!3m2!1sen!2sus!4v1678886500000" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
+                        <iframe id="mapFrame" class="map-iframe" src="https://www.google.com/maps/embed?pb=!1m18" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
 
-                <!-- Card 3: Wind Details -->
                 <div class="glass">
                     <div class="widget-title"><i class="ph ph-flag"></i> Wind Details</div>
                     <div class="widget-content wind-display">
-                        <i id="windIcon" class="ph ph-navigation-arrow wind-icon" style="transform: rotate(97deg);"></i>
+                        <i id="windIcon" class="ph ph-navigation-arrow wind-icon" style="transform:rotate(97deg)"></i>
                         <div>
                             <div class="widget-value-large" id="windSpeed">10 <span class="widget-value-small">kph</span></div>
                             <div class="wind-value" id="windGusts">Gusts: 26 kph</div>
@@ -590,20 +78,16 @@
                     </div>
                 </div>
 
-                <!-- Card 4: UV Index & Sunrise (Span 2) -->
                 <div class="glass col-span-2">
                     <div class="widget-title"><i class="ph ph-sun-dim"></i> UV Index & Sunrise</div>
                     <div class="widget-content sun-uv-content">
-                        <!-- UV Part -->
                         <div class="uv-index-display">
                             <div class="widget-value-large" id="uvValue">0 <span class="widget-value-small">Low</span></div>
                             <div class="widget-subtext" id="uvSubtext">Low for the rest of the day.</div>
                         </div>
-                        
-                        <!-- Sun Path Part -->
                         <div class="sun-path-container">
                             <div class="sun-path-arc">
-                                <i class="ph ph-moon sun-icon-on-path" id="sunIcon" style="left: 95%; top: 20px; color: var(--text-secondary);"></i>
+                                <i class="ph ph-moon sun-icon-on-path" id="sunIcon" style="left:95%;top:20px;color:var(--text-secondary)"></i>
                             </div>
                             <div class="sun-path-labels">
                                 <span id="sunriseTime"><i class="ph ph-sunrise"></i> 6:17 AM</span>
@@ -613,7 +97,6 @@
                     </div>
                 </div>
 
-                <!-- Card 5: Humidity -->
                 <div class="glass">
                     <div class="widget-title"><i class="ph ph-drop"></i> Humidity</div>
                     <div class="widget-content">
@@ -622,20 +105,19 @@
                     </div>
                 </div>
 
-                <!-- Card 6: Pressure -->
                 <div class="glass">
                     <div class="widget-title"><i class="ph ph-gauge"></i> Pressure</div>
                     <div class="widget-content">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="ph ph-trend-up" id="pressureIcon" style="font-size: 1.5rem; color: var(--accent-green);"></i>
+                        <div style="display:flex;align-items:center;gap:10px">
+                            <i class="ph ph-trend-up" id="pressureIcon" style="font-size:1.5rem;color:var(--accent-green)"></i>
                             <div class="widget-value-large" id="pressureValue">1,013 <span class="widget-value-small">hPa</span></div>
                         </div>
                         <div class="widget-subtext" id="pressureSubtext">Above average</div>
                         <div class="pressure-bar-container">
                             <div class="pressure-bar">
-                                <div class="pressure-indicator" id="pressureIndicator" style="left: 65%;"></div>
+                                <div class="pressure-indicator" id="pressureIndicator" style="left:65%"></div>
                             </div>
-                            <div class="pressure-labels"> 
+                            <div class="pressure-labels">
                                 <span>Low</span>
                                 <span>High</span>
                             </div>
@@ -643,7 +125,6 @@
                     </div>
                 </div>
 
-                <!-- Card 7: Visibility -->
                 <div class="glass">
                     <div class="widget-title"><i class="ph ph-eye"></i> Visibility</div>
                     <div class="widget-content">
@@ -652,7 +133,6 @@
                     </div>
                 </div>
 
-                <!-- Card 8: Feels Like -->
                 <div class="glass">
                     <div class="widget-title"><i class="ph ph-thermometer-cold"></i> Feels Like</div>
                     <div class="widget-content">
@@ -660,247 +140,9 @@
                         <div class="widget-subtext" id="feelsLikeSubtext">Wind is making it feel cooler.</div>
                     </div>
                 </div>
-
             </div>
         </main>
     </div>
-
-    <!-- <script>
-        // Configuration
-        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const forecastContainer = document.getElementById('forecastContainer');
-        const hourlyForecastContainer = document.getElementById('hourlyForecastContainer');
-        const mapFrame = document.getElementById('mapFrame');
-
-        // Mock data for different cities
-        const cityData = {
-            "Bengaluru": {
-                lat: 12.9716, lon: 77.5946, tz: "Asia/Kolkata",
-                temp: 23, condition: "Clear", summary: "Clear • H:27° L:17°",
-                aqi: { val: 143, text: "Moderately Polluted", sub: "Air quality is 143, similar to yesterday.", pos: "60%" },
-                wind: { speed: 10, gusts: 26, dir: 97, icon: "ph-navigation-arrow", rotate: 97 },
-                sun: { rise: "6:17 AM", set: "6:49 PM", icon: "ph-moon", pos: "95%", top: "20px", color: "var(--text-secondary)" },
-                uv: { val: 0, text: "Low", sub: "Low for the rest of the day." },
-                humidity: { val: "59%", dew: "The dew point is 14° right now." },
-                pressure: { val: "1,013", sub: "Above average", icon: "ph-trend-up", color: "var(--accent-green)", pos: "65%" },
-                visibility: { val: "25", sub: "Perfectly clear view." },
-                feelsLike: { val: "21°", sub: "Wind is making it feel cooler." }
-            },
-            "New Delhi": {
-                lat: 28.6139, lon: 77.2090, tz: "Asia/Kolkata",
-                temp: 20, condition: "Haze", summary: "Haze • H:26° L:12°",
-                aqi: { val: 215, text: "Very Unhealthy", sub: "Air quality is poor.", pos: "80%" },
-                wind: { speed: 5, gusts: 10, dir: 310, icon: "ph-navigation-arrow", rotate: 310 },
-                sun: { rise: "6:45 AM", set: "6:10 PM", icon: "ph-moon", pos: "95%", top: "20px", color: "var(--text-secondary)" },
-                uv: { val: 0, text: "Low", sub: "Low for the rest of the day." },
-                humidity: { val: "75%", dew: "The dew point is 15° right now." },
-                pressure: { val: "1,015", sub: "High", icon: "ph-trend-up", color: "var(--accent-green)", pos: "75%" },
-                visibility: { val: "3", sub: "Poor visibility." },
-                feelsLike: { val: "19°", sub: "Humidity makes it feel close." }
-            },
-            "Mumbai": {
-                lat: 19.0760, lon: 72.8777, tz: "Asia/Kolkata",
-                temp: 28, condition: "Humid", summary: "Humid • H:31° L:21°",
-                aqi: { val: 88, text: "Moderate", sub: "Air quality is acceptable.", pos: "35%" },
-                wind: { speed: 15, gusts: 30, dir: 210, icon: "ph-navigation-arrow", rotate: 210 },
-                sun: { rise: "6:30 AM", set: "6:40 PM", icon: "ph-moon", pos: "95%", top: "20px", color: "var(--text-secondary)" },
-                uv: { val: 1, text: "Low", sub: "Low for the rest of the day." },
-                humidity: { val: "82%", dew: "The dew point is 24° right now." },
-                pressure: { val: "1,010", sub: "Normal", icon: "ph-arrow-right", color: "var(--text-secondary)", pos: "50%" },
-                visibility: { val: "8", sub: "Slightly hazy." },
-                feelsLike: { val: "30°", sub: "Humidity makes it feel warmer." }
-            },
-            "London": {
-                lat: 51.5074, lon: -0.1278, tz: "Europe/London",
-                temp: 12, condition: "Cloudy", summary: "Cloudy • H:15° L:8°",
-                aqi: { val: 45, text: "Good", sub: "Air quality is excellent.", pos: "15%" },
-                wind: { speed: 22, gusts: 45, dir: 270, icon: "ph-navigation-arrow", rotate: 270 },
-                sun: { rise: "7:10 AM", set: "4:30 PM", icon: "ph-sun-dim", pos: "50%", top: "-12px", color: "var(--accent-yellow)" }, // Simulating 2PM
-                uv: { val: 2, text: "Low", sub: "Low for the rest of the day." },
-                humidity: { val: "65%", dew: "The dew point is 5° right now." },
-                pressure: { val: "998", sub: "Low", icon: "ph-trend-down", color: "var(--accent-red)", pos: "20%" },
-                visibility: { val: "15", sub: "Good visibility." },
-                feelsLike: { val: "9°", sub: "Wind is making it feel cooler." }
-            }
-        };
-        
-        // Generate Mock Forecast Data
-        function generateForecast() {
-            let html = '';
-            let today = new Date().getDay();
-            
-            for (let i = 0; i < 10; i++) { // 10-day
-                let dayIndex = (today + i) % 7;
-                let dayName = i === 0 ? 'Today' : (i === 1 ? 'Tomorrow' : days[dayIndex]);
-                let minTemp = 15 + Math.floor(Math.random() * 5);
-                let maxTemp = 25 + Math.floor(Math.random() * 5);
-                let width = Math.floor(Math.random() * 40) + 30; // Random bar width
-                let left = Math.floor(Math.random() * 30); // Random start position
-                
-                let iconClass = 'ph-sun';
-                let color = '#facc15';
-                if (Math.random() > 0.7) { iconClass = 'ph-cloud-rain'; color = '#38bdf8'; }
-                else if (Math.random() > 0.5) { iconClass = 'ph-cloud'; color = '#94a3b8'; }
-
-                html += `
-                <div class="forecast-item">
-                    <div class="forecast-day">${dayName}</div>
-                    <i class="ph ${iconClass} forecast-icon" style="color: ${color}"></i>
-                    <div class="forecast-day" style="text-align:right; color: #94a3b8;">${minTemp}°</div>
-                    <div class="forecast-bar">
-                        <div class="forecast-fill" style="width: ${width}%; left: ${left}%;"></div>
-                    </div>
-                    <div class="forecast-day">${maxTemp}°</div>
-                </div>
-                `;
-            }
-            forecastContainer.innerHTML = html;
-        }
-
-        // Generate Mock Hourly Data
-        function generateHourlyForecast() {
-            let html = ``;
-
-            let now = new Date();
-            let currentHour = now.getHours();
-
-            for (let i = 0; i < 12; i++) {
-                let hour = (currentHour + i) % 24;
-                let period = hour >= 12 ? 'PM' : 'AM';
-                let displayHour = hour % 12 === 0 ? 12 : hour % 12;
-                let label = i === 0 ? 'Now' : `${displayHour}${period}`;
-                
-                let temp = 20 + Math.floor(Math.random() * 5) - i; // Temp generally decreasing
-                
-                let iconClass = 'ph-sun';
-                let color = '#facc15';
-                if (hour > 19 || hour < 6) { // Night time
-                    iconClass = 'ph-moon-stars';
-                    color = '#fff';
-                    if (Math.random() > 0.5) { iconClass = 'ph-cloud-moon'; color = '#94a3b8'; }
-                } else { // Day time
-                    if (Math.random() > 0.7) { iconClass = 'ph-cloud-rain'; color = '#38bdf8'; }
-                    else if (Math.random() > 0.5) { iconClass = 'ph-cloud'; color = '#94a3b8'; }
-                }
-
-                html += `
-                <div class="hourly-item">
-                    <span>${label}</span>
-                    <i class_ph ${iconClass}" style="color:${color}; font-size: 1.5rem;"></i>
-                    <span>${temp}°</span>
-                </div>
-                `;
-            }
-            hourlyForecastContainer.innerHTML = html;
-        }
-
-        // City Click Handler
-        function updateCity(cityName, lat, lon) {
-            // Update Active State in Sidebar
-            document.querySelectorAll('.city-card').forEach(card => {
-                card.classList.remove('active');
-                if(card.querySelector('.city-name').textContent === cityName) {
-                    card.classList.add('active');
-                }
-            });
-
-            const data = cityData[cityName] || cityData["Bengaluru"];
-
-            // Update Main View with Animation
-            const mainHeader = document.querySelector('.main-header');
-            mainHeader.style.opacity = '0';
-            
-            setTimeout(() => {
-                // Main Header
-                document.getElementById('mainLocation').textContent = cityName;
-                document.getElementById('mainTemp').textContent = data.temp + '°';
-                document.getElementById('mainSummary').textContent = data.summary;
-                
-                mainHeader.style.opacity = '1';
-                mainHeader.style.transition = 'opacity 0.5s ease';
-
-                // Update Google Map
-                const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d100000!2d${lon}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${lat.toFixed(4)},${lon.toFixed(4)}!5e0!3m2!1sen!2sus!4v1678886500000`;
-                mapFrame.src = mapUrl;
-
-                // Update Bento Grid
-                // AQI
-                document.getElementById('aqiValue').textContent = data.aqi.val;
-                document.getElementById('aqiText').textContent = data.aqi.text;
-                document.getElementById('aqiSubtext').textContent = data.aqi.sub;
-                document.getElementById('aqiIndicator').style.left = data.aqi.pos;
-
-                // Wind
-                document.getElementById('windSpeed').innerHTML = `${data.wind.speed} <span class.widget-value-small">kph</span>`;
-                document.getElementById('windGusts').textContent = `Gusts: ${data.wind.gusts} kph`;
-                document.getElementById('windDirection').textContent = `Direction: ${data.wind.dir}°`;
-                document.getElementById('windIcon').style.transform = `rotate(${data.wind.rotate}deg)`;
-
-                // UV & Sun
-                document.getElementById('uvValue').innerHTML = `${data.uv.val} <span class.widget-value-small">${data.uv.text}</span>`;
-                document.getElementById('uvSubtext').textContent = data.uv.sub;
-                document.getElementById('sunriseTime').innerHTML = `<i class="ph ph-sunrise"></i> ${data.sun.rise}`;
-                document.getElementById('sunsetTime').innerHTML = `<i class.ph ph-sunset"></i> ${data.sun.set}`;
-                
-                const sunIcon = document.getElementById('sunIcon');
-                sunIcon.className = `ph ${data.sun.icon} sun-icon-on-path`;
-                sunIcon.style.left = data.sun.pos;
-                sunIcon.style.top = data.sun.top;
-                sunIcon.style.color = data.sun.color;
-
-                // Humidity
-                document.getElementById('humidityValue').textContent = data.humidity.val;
-                document.getElementById('dewPoint').textContent = data.humidity.dew;
-
-                // Pressure
-                document.getElementById('pressureValue').innerHTML = `${data.pressure.val} <span class.widget-value-small">hPa</span>`;
-                document.getElementById('pressureSubtext').textContent = data.pressure.sub;
-                document.getElementById('pressureIndicator').style.left = data.pressure.pos;
-                const pressureIcon = document.getElementById('pressureIcon');
-                pressureIcon.className = `ph ${data.pressure.icon}`;
-                pressureIcon.style.color = data.pressure.color;
-
-                // Visibility
-                document.getElementById('visibilityValue').innerHTML = `${data.visibility.val} <span class.widget-value-small">km</span>`;
-                document.getElementById('visibilitySubtext').textContent = data.visibility.sub;
-
-                // Feels Like
-                document.getElementById('feelsLikeValue').textContent = data.feelsLike.val;
-                document.getElementById('feelsLikeSubtext').textContent = data.feelsLike.sub;
-
-                // Regenerate random forecast visuals
-                generateForecast();
-                generateHourlyForecast();
-                updateAllTimes();
-
-            }, 300);
-        }
-
-        // Function to update all city times in sidebar
-        function updateAllTimes() {
-            Object.keys(cityData).forEach(city => {
-                const tz = cityData[city].tz;
-                const timeString = new Date().toLocaleTimeString('en-US', {
-                    timeZone: tz,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true
-                });
-                const timeEl = document.getElementById(`time-${city.replace(' ', '-')}`);
-                if(timeEl) {
-                    timeEl.textContent = timeString;
-                }
-            });
-        }
-
-        // Initialize
-        window.addEventListener('load', () => {
-            generateForecast();
-            generateHourlyForecast();
-            updateAllTimes();
-            setInterval(updateAllTimes, 60000); // Update times every minute
-        });
-
-    </script> -->
+    <script src = "weather.js"></script>
 </body>
 </html>
