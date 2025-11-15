@@ -20,7 +20,10 @@ SmartCity+ is an interactive web dashboard that lets you explore real-time weath
 
 - **Frontend:** HTML, CSS, JavaScript  
 - **APIs Used:**  
-  - [OpenWeatherMap API](https://openweathermap.org/api) — Weather and geolocation data  
+  - [OpenWeatherMap API](https://openweathermap.org/api) — Weather and geolocation data
+  - [Ambee API]
+  - [Windy API]
+  - [Google Maps API]
   - Local endpoints (`/aqi` and `/forecast`) — AQI and forecast data  
 - **Charting:** [Chart.js](https://www.chartjs.org/) — Temperature and forecast graphs  
 
