@@ -60,6 +60,27 @@ body::before {
     }
 }
 
+#mainhead {
+    text-shadow: 0px 0px 10px cyan,
+                0px 0px 20px cyan,
+                0px 0px 40px cyan,
+                0px 0px 80px cyan;
+}
+
+.ph.ph-buildings{
+    text-shadow: 0px 0px 10px cyan,
+                0px 0px 20px cyan,
+                0px 0px 40px cyan,
+                0px 0px 80px cyan;
+}
+
+.ph.ph-navigation-arrow.wind-icon{
+    text-shadow: 0px 0px 10px cyan,
+                0px 0px 20px cyan,
+                0px 0px 40px cyan,
+                0px 0px 80px cyan;
+}
+
 .app-container {
     display: grid;
     grid-template-columns: 28% 1fr;
@@ -89,7 +110,23 @@ body::before {
     background-color: #34d399;
     padding: 5px;
     border-radius: 8px;
-    border: 2px solid #1a7755;
+    border: 0px;
+    box-shadow: 0px 0px 10px #34d399,
+                0px 0px 20px #34d399,
+                0px 0px 20px #34d399,
+                0px 0px 10px #34d399;
+    transition: 0.5s;
+}
+
+#submit:hover{
+    cursor: pointer;
+    background-color: #25986e;
+    transform: scale(1.1);
+    border: 0px;
+    box-shadow: 0px 0px 5px #34d399,
+                0px 0px 15px #34d399,
+                0px 0px 35px #34d399,
+                0px 0px 35px #34d399;
 }
 
 .glass:hover {
@@ -204,18 +241,30 @@ body::before {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 5px;
+    text-shadow: 0px 0px 10px rgb(160, 160, 160),
+                0px 0px 20px rgb(160, 160, 160),
+                0px 0px 40px rgb(160, 160, 160),
+                0px 0px 80px rgb(160, 160, 160);
 }
 
 .current-temp-display {
     font-size: 4rem;
     font-weight: 200;
     line-height: 1;
+    text-shadow: 0px 0px 10px rgb(160, 160, 160),
+                0px 0px 20px rgb(160, 160, 160),
+                0px 0px 40px rgb(160, 160, 160),
+                0px 0px 80px rgb(160, 160, 160);
 }
 
 .temp-summary {
     color: var(--text-secondary);
     margin-top: 5px;
     font-size: 1.1rem;
+    text-shadow: 0px 0px 10px rgb(160, 160, 160),
+                0px 0px 20px rgb(160, 160, 160),
+                0px 0px 40px rgb(160, 160, 160),
+                0px 0px 80px rgb(160, 160, 160);
 }
 
 .hourly-scroll {

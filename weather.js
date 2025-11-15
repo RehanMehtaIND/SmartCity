@@ -170,7 +170,7 @@ function displayHourlyForecast(forecast) {
         div.innerHTML = `<div>${timeStr}</div><div>${c}°C</div>`
         cont.appendChild(div)
     })
-    
+
     drawGraph(sliced)
 }
 
