@@ -1,6 +1,6 @@
 # SmartCity+ 🌆
 
-SmartCity+ is an interactive web dashboard that lets you explore real-time weather, air quality, and wind conditions for cities around the world. It also includes hourly forecasts, city maps, and temperature graphs — all in a sleek, glass-style interface.
+SmartCity+ is an interactive web dashboard that lets you explore real-time weather, air quality, and wind conditions for cities around the world. It also includes hourly forecasts, city maps, and temperature graphs - all in a sleek, glass-style interface.
 
 ---
 
@@ -30,9 +30,7 @@ SmartCity+ is an interactive web dashboard that lets you explore real-time weath
 
 1. Clone the repository  
 git clone https://github.com/RehanMehtaIND/SmartCity.git
-cd SmartCity
-
-text
+cd SmartCity text
 2. Open `index.html` in your web browser.  
 3. Make sure your local server is running if you plan to fetch AQI and forecast data from `http://localhost:3000/`.
 
@@ -64,17 +62,11 @@ text
 
 1. Fork the repository  
 2. Create a new branch  
-git checkout -b feature/YourFeature
-
-text
+git checkout -b feature/YourFeature text
 3. Commit your changes  
-git commit -m "Add feature"
-
-text
+git commit -m "Add feature" text
 4. Push to your branch  
-git push origin feature/YourFeature
-
-text
+git push origin feature/YourFeature text
 5. Open a Pull Request  
 
 ---
